@@ -64,9 +64,10 @@ app.post('/users/register', (req, res) => {
   // req.body에 json 객체로 키-값 이 들어가있다.
   console.log(req.body);
   const user = new User({
-    questionId: Math.random(),
-    title: req.body.title,
-    content: req.body.content,
+    email: req.body.email,
+    userId: req.body.userId,
+    password: req.body.password,
+    confirmPassword: req.body.confirmPassword,
   }); // 정의한 모델을 불러와 요청 안의 데이터로 새 인스턴스 생성
   user.save((err, userInfo) => {
     if (err) return res.json({ success: false, err });
@@ -86,7 +87,7 @@ app.post('/users/login', (req, res) => {
   User.findOne({ email: req.body.email }, (err, user) => {
     if (!user) {
       return res.json({
-        loginSuccess: false,
+        loginStatus: false,
         message: '가입되지 않은 사용자입니다. 이메일 주소를 확인해주세요',
       });
     }
@@ -94,7 +95,7 @@ app.post('/users/login', (req, res) => {
     user.comparePassword(req.body.password, (err, isMatch) => {
       if (!isMatch) {
         return res.json({
-          loginSuccess: false,
+          loginStatus: false,
           message: '비밀번호가 틀렸습니다.',
         });
       }
@@ -106,7 +107,7 @@ app.post('/users/login', (req, res) => {
         res
           .cookie('x_auth', user.token)
           .status(200)
-          .json({ loginSuccess: true, userId: user._id });
+          .json({ loginStatus: true, userId: user._id });
       });
     });
   });

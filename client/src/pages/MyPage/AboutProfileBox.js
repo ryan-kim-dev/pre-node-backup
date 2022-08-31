@@ -17,6 +17,7 @@ function AboutProfileBox() {
   const getProfile = async () => {
     const response = await axios.get('/questions');
     console.log(response.data);
+    // const temp = request.data.questions.filter((el) => el.writer === userId);
     setMyProfileList(response.data.questions);
   };
   const profileEditHandler = () => {

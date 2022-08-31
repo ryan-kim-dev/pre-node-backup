@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({ email: '', password: '' });
 
   const onChange = (e) => {
@@ -17,7 +19,12 @@ function LoginForm() {
     e.preventDefault();
     axios
       .post('/users/login', userInfo)
-      .then((response) => console.log(response.data))
+      .then((response) => {
+        const { loginStatus, userId } = response.data;
+        localStorage.setItem('loginStatus', loginStatus);
+        localStorage.setItem('userId', userId);
+        navigate('/');
+      })
       .catch((err) => console.log(`${err}`));
   };
 
@@ -30,11 +37,11 @@ function LoginForm() {
       >
         <label htmlFor="email">
           Email <br />
-          <input type="email" />
+          <input type="email" name="email" />
         </label>
         <label htmlFor="pasword">
           Password <br />
-          <input type="password" />
+          <input type="password" name="password" />
         </label>
         <br />
         <button

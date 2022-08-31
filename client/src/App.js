@@ -27,7 +27,6 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/edit-mypage" element={<EditProfilePage />} />
-
           <Route path="/add-question" element={<AddQuestion />} />
           <Route path="/edit-question" element={<EditQuestion />} />
           <Route path="/delete-question" element={<DeleteQuestion />} />

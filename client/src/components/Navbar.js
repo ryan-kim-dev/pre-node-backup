@@ -6,6 +6,7 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStackOverflow } from '@fortawesome/fontawesome-free-brands';
 import { BiSearch } from 'react-icons/bi';
+import { RiCloseFill } from 'react-icons/ri';
 import Aside from './Aside';
 
 function Navbar() {
@@ -37,14 +38,12 @@ function Navbar() {
     return navigate('/');
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
   return (
     <NavbarLayout>
       <div className="left">
         <NavLinkBox onClick={handleNavbarPopup}>
-          {isOpen ? <Aside /> : <GiHamburgerMenu />}
+          {isOpen ? <RiCloseFill /> : <GiHamburgerMenu />}
+          {isOpen && <Aside />}
         </NavLinkBox>
         <LogoButton type="button" onClick={handleLogoClick}>
           <FontAwesomeIcon icon={faStackOverflow} size="2x" />
@@ -69,8 +68,12 @@ function Navbar() {
         </form>
       </div>
       <div className="right">
-        <Button onClick={handleSubmit}>Log in</Button>
-        <Button onClick={handleSubmit}>Sign up</Button>
+        <Button id="login" onClick={() => navigate('/login')}>
+          Log in
+        </Button>
+        <Button id="signup" onClick={() => navigate('/register')}>
+          Sign up
+        </Button>
       </div>
     </NavbarLayout>
   );
@@ -79,10 +82,12 @@ function Navbar() {
 export default Navbar;
 
 const NavbarLayout = styled.div`
+  position: fixed;
+  top: 0;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
   background-color: #f7f7f7;
   width: 100%;
-  height: 10%;
+  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -128,8 +133,9 @@ const NavbarLayout = styled.div`
 `;
 
 const NavLinkBox = styled.div`
-  border: 1px solid gray;
   display: flex;
+  font-size: 20px;
+  margin-right: 20px;
 `;
 
 const LogoButton = styled.button`
@@ -137,10 +143,28 @@ const LogoButton = styled.button`
   cursor: pointer;
   height: 10%;
   border: none;
+  font-size: 20px;
 `;
 
 const Button = styled.button`
   width: 80px;
-  height: 100%;
-  padding-right: 10px;
+  height: 40px;
+  margin: 0 5px;
+  border: 0.1px solid #54a0ff;
+  border-radius: 5px;
+  transition: all 0.9s;
+
+  &#login {
+  }
+  &#login:hover {
+    box-shadow: 200px 0 0 0 rgba(0, 0, 0, 0.1) inset;
+  }
+
+  &#signup {
+    background-color: #54a0ff;
+    color: #fff;
+  }
+  &#signup:hover {
+    box-shadow: 200px 0 0 0 rgba(0, 0, 0, 0.2) inset;
+  }
 `;

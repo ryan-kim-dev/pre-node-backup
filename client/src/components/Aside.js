@@ -18,6 +18,9 @@ function Aside() {
         <li>
           <Link to="/questions">Questions</Link>
         </li>
+        <li>
+          <Link to="/mypage">My page</Link>
+        </li>
       </ul>
     </AsideLayout>
   );
@@ -26,6 +29,8 @@ function Aside() {
 export default Aside;
 
 const AsideLayout = styled.div`
+  position: absolute;
+  top: 60px;
   ul {
     list-style: none;
   }

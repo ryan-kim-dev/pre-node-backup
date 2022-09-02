@@ -14,7 +14,7 @@ export const BackgroundLayout = styled.div`
   // App.js에서 최상위로 감싸게 두었는데 추후 위치는 수정해야 할 수도??
   // flex-direction 칼럼방향으로 주어서 navbar, 컨텐츠, footer 순으로
   // 세로로 맞추기 위해 flex 줬습니다.
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;

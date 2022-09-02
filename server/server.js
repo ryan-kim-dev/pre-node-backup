@@ -11,6 +11,7 @@ const config = require('./config/keys');
 // 정의한 Model 가져오기
 const { User } = require('./models/User');
 const { Question } = require('./models/Question');
+const { Counter } = require('./models/Counter');
 // 폴더를 분리해서 작성해둔 인증 처리하는 함수 가져오기
 const { auth } = require('./middleware/auth');
 
@@ -35,6 +36,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
+// * 전체 게시글 조회
 app.get('/questions', (req, res) => {
   Question.find().then(
     questions => {
@@ -46,16 +48,61 @@ app.get('/questions', (req, res) => {
   );
 });
 
+// * 단건 게시글 조회
+app.post('/questions/:questionIdx', (req, res) => {
+  Question.findOne({ questionIdx: Number(req.body.questionIdx) }).then(
+    question => {
+      console.log(question);
+      res.status(200).send({ question });
+    },
+    error => {
+      res.status(400).send(error);
+    }
+  );
+});
+
 // * 게시글 POST 요청 응답
 app.post('/questions', (req, res) => {
-  const question = new Question(req.body);
-  question.save((err, userInfo) => {
-    if (err) return res.json({ success: false, err });
-    return res.status(200).json({
-      success: true,
-      text: '새로운 질문글을 등록하였습니다',
+  // question.save((err, userInfo) => {
+  //   if (err) return res.json({ success: false, err });
+  //   return res.status(200).json({
+  //     success: true,
+  //     text: '새로운 질문글을 등록하였습니다',
+  //   });
+  // });
+  let temp = {
+    questionIdx: req.body.questionIdx,
+    writer: req.body.writer,
+    title: req.body.title,
+    content: req.body.content,
+    regdate: req.body.regdate,
+    updatedate: req.body.updatedate,
+    member: req.body.member,
+    userId: req.body.userId,
+  };
+
+  Counter.findOne({ name: 'counter' })
+    .exec()
+    .then(counter => {
+      temp.questionIdx = counter.questionIdx;
+      User.findOne({ uid: req.body.uid })
+        .exec()
+        .then(userInfo => {
+          temp.userId = userInfo._id;
+          const question = new Question(temp);
+          question.save().then(doc => {
+            Counter.updateOne(
+              { name: 'counter' },
+              { $inc: { questionIdx: 1 } }
+            ).then(() => {
+              res.status(200).json({ success: true });
+            });
+          });
+        });
+    })
+    .catch(err => {
+      res.status(400).json({ success: false });
     });
-  });
 });
 
 // * 2.1 회원가입 요청의 응답
@@ -65,7 +112,7 @@ app.post('/users/register', (req, res) => {
   console.log(req.body);
   const user = new User({
     email: req.body.email,
-    userId: req.body.userId,
+    username: req.body.username,
     password: req.body.password,
     confirmPassword: req.body.confirmPassword,
   }); // 정의한 모델을 불러와 요청 안의 데이터로 새 인스턴스 생성
@@ -73,6 +120,7 @@ app.post('/users/register', (req, res) => {
     if (err) return res.json({ success: false, err });
     return res.status(200).json({
       success: true,
+      username: req.body.username,
     });
   });
   // save: 몽고디비의 메서드 - 콜백함수로 에러, 저장된 데이터를 매개변수로 받는다.
@@ -115,7 +163,7 @@ app.post('/users/login', (req, res) => {
 
 // * 2.3 인증기능 라우터 - 인증페이지 요청 응답
 // role이 1이면 관리자, 0이면 일반 유저인 경우로 한다.
-app.get('/api/users/auth', auth, (req, res) => {
+app.get('/users/auth', auth, (req, res) => {
   // './middleware/auth.js'의 auth 함수에서 코드가 종료되면서 next() 호출하므로
   // 미들웨어를 실행시키고 다시 나머지 코드를 실행해서 응답을 보내줌.
   // 미들웨어에서 예외처리를 해두었기 때문에 next()후 여기로 돌아온다면

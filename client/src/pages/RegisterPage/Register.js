@@ -8,7 +8,7 @@ function Register() {
 
   const [userInfo, setuserInfo] = useState({
     email: '',
-    userId: '',
+    username: '',
     password: '',
     confirmPassword: '',
   });
@@ -24,10 +24,17 @@ function Register() {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (userInfo.password === userInfo.confirmPassword) {
-      await axios
-        .post('/users/register', userInfo)
-        .then(() => navigate('/login'))
-        .catch((err) => alert(`${err}`));
+      const res = await axios.post('/users/register', userInfo);
+      if (res.data.success) {
+        const { username } = res.data;
+        localStorage.setItem('username', username);
+        navigate('/login');
+      }
+      // .then((res) => {
+      //   console.log(res.data);
+      //
+
+      // })
     }
   };
 
@@ -36,7 +43,7 @@ function Register() {
       <form htmlFor="register" onSubmit={onSubmit} onChange={onChange}>
         <label htmlFor="user-id">
           Display Name <br />
-          <input id="user-id" name="userId" type="text" />
+          <input id="user-id" name="username" type="text" />
         </label>
         <label htmlFor="email">
           Email <br />

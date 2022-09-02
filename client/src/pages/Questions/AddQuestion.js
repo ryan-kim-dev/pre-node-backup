@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 axios.defaults.withCredentials = true;
 
 function AddQuestion() {
+  const navigate = useNavigate();
   const [data, setData] = useState({
-    writer: '',
+    writer: localStorage.username,
     title: '',
     content: '',
   });
@@ -18,11 +20,11 @@ function AddQuestion() {
   };
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log(data);
     axios
       .post('/questions', data)
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
+        alert(`Successfully posted!`);
+        navigate('/questions');
       })
       .catch((err) => console.log(`${err}`));
   };
@@ -40,10 +42,6 @@ function AddQuestion() {
           <label htmlFor="content">
             내용
             <textarea type="text" id="content" name="content" />
-          </label>
-          <label htmlFor="content">
-            작성자
-            <textarea type="text" id="content" name="writer" />
           </label>
         </div>
         <input type="submit" id="title" value="등록" />

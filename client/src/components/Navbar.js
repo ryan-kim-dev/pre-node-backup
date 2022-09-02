@@ -8,6 +8,7 @@ import { faStackOverflow } from '@fortawesome/fontawesome-free-brands';
 import { BiSearch } from 'react-icons/bi';
 import { RiCloseFill } from 'react-icons/ri';
 import Aside from './Aside';
+import Logout from './Logout';
 
 function Navbar() {
   const navigate = useNavigate();
@@ -41,7 +42,10 @@ function Navbar() {
   return (
     <NavbarLayout>
       <div className="left">
-        <NavLinkBox onClick={handleNavbarPopup}>
+        <NavLinkBox
+          onClick={handleNavbarPopup}
+          className={localStorage.loginStatus === 'true' ? 'hidden' : 'show'}
+        >
           {isOpen ? <RiCloseFill /> : <GiHamburgerMenu />}
           {isOpen && <Aside />}
         </NavLinkBox>
@@ -67,14 +71,18 @@ function Navbar() {
           </button>
         </form>
       </div>
-      <div className="right">
-        <Button id="login" onClick={() => navigate('/login')}>
-          Log in
-        </Button>
-        <Button id="signup" onClick={() => navigate('/register')}>
-          Sign up
-        </Button>
-      </div>
+      {localStorage.loginStatus === 'true' ? (
+        <Logout />
+      ) : (
+        <div className="right">
+          <Button id="login" onClick={() => navigate('/login')}>
+            Log in
+          </Button>
+          <Button id="signup" onClick={() => navigate('/register')}>
+            Sign up
+          </Button>
+        </div>
+      )}
     </NavbarLayout>
   );
 }
@@ -136,6 +144,10 @@ const NavLinkBox = styled.div`
   display: flex;
   font-size: 20px;
   margin-right: 20px;
+
+  &.hidden {
+    display: none;
+  }
 `;
 
 const LogoButton = styled.button`
@@ -143,7 +155,13 @@ const LogoButton = styled.button`
   cursor: pointer;
   height: 10%;
   border: none;
-  font-size: 20px;
+  font-size: 23px;
+  position: relative;
+  bottom: 4px;
+
+  svg {
+    margin-right: 5px;
+  }
 `;
 
 const Button = styled.button`

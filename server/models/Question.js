@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 
 const questionSchema = mongoose.Schema({
-  questionId: {
+  questionIdx: {
+    type: Number,
+  },
+  userId: {
+    // 프라이머리 키
     type: String,
   },
   writer: {
@@ -17,9 +21,6 @@ const questionSchema = mongoose.Schema({
     type: String,
   },
   updatedate: {
-    type: String,
-  },
-  member: {
     type: String,
   },
 });

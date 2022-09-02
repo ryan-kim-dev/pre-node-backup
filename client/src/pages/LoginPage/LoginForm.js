@@ -23,7 +23,8 @@ function LoginForm() {
         const { loginStatus, userId } = response.data;
         localStorage.setItem('loginStatus', loginStatus);
         localStorage.setItem('userId', userId);
-        navigate('/');
+        if (loginStatus === false) return alert('로그인 실패!');
+        return navigate('/');
       })
       .catch((err) => console.log(`${err}`));
   };

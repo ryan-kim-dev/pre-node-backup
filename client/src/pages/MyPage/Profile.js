@@ -28,6 +28,7 @@ const ProfileLayout = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
 
 const ProfileImgandInfo = styled.div`
@@ -36,4 +37,5 @@ const ProfileImgandInfo = styled.div`
   align-items: center;
   width: 250px;
   margin: 1rem;
+  margin-bottom: 200px;
 `;

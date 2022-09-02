@@ -15,10 +15,10 @@ function AboutProfileBox() {
   const navigate = useNavigate();
 
   const getProfile = async () => {
-    const response = await axios.get('/questions');
+    const response = await axios.get('/mypage');
     console.log(response.data);
     // const temp = request.data.questions.filter((el) => el.writer === userId);
-    setMyProfileList(response.data.questions);
+    setMyProfileList(response.data.body);
   };
   const profileEditHandler = () => {
     navigate('/edit-mypage');
@@ -33,17 +33,17 @@ function AboutProfileBox() {
       <ProfileEditButton type="submit" onClick={profileEditHandler}>
         edit button
       </ProfileEditButton>
-
       <ProfileBox>
         {myProfileList !== undefined ? (
           myProfileList?.map((profile, idx) => {
             return (
               <div key={Math.random()} idx={idx}>
                 <ProfileTitle>
-                  {profile.title}
-                  {idx + 1}
+                  <span style={{ fontSize: '18px', color: 'skyBlue' }}>
+                    {profile.title}
+                  </span>
+                  {/* :<span style={{ fontSize: '14px' }}> {profile.content} </span> */}
                 </ProfileTitle>
-                <ProfileContent>{profile.content}</ProfileContent>
               </div>
             );
           })
@@ -64,29 +64,38 @@ export default AboutProfileBox;
 const AboutProfileBoxLayout = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 1rem;
+  margin-left: 3rem;
   align-items: flex-end;
 `;
 const ProfileBox = styled.div`
-  width: 600px;
-  height: 500px;
+  width: 500px;
+  height: 300px;
+  border-radius: 20px;
+  box-shadow: 7px 8px 30px rgba(0, 0, 0, 0.2);
+  overflow: scroll;
+  /* border-radius: 10px; */
   box-sizing: border-box;
   padding: 1rem;
 `;
 const ProfileTitle = styled.h2`
-  text-align: center;
+  text-align: left;
 `;
 
 const ProfileContent = styled.div`
-  width: 100%;
-  height: 400px;
-  border: 1px solid #000;
-  border-radius: 50px;
   box-sizing: border-box;
   display: flex;
-  padding: 3rem;
 `;
 const ProfileEditButton = styled.button`
+  margin: 10px;
   width: 80px;
   height: 30px;
+  background-color: #eee;
+  border-radius: 5px;
+  color: #078aff;
+  border: 1px solid #078aff;
+  cursor: pointer;
+  :hover {
+    background-color: #078aff;
+    color: #fff;
+  }
 `;
